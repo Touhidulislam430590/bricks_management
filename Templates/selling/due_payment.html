@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <h3 class="text-center">Due List</h3>
+
+	<div class="mt-2 mb-2">
+	    <div class="row">
+            <div class="col-md-3">
+                <a href="{% url 'selling' %}" class="btn btn-outline-primary">Back</a>
+            </div>
+            <div class="col-md-3"></div>
+            <div class="col-md-3"></div>
+            <div class="col-md-3">
+                <form class="d-flex" role="search" method="POST" action="{% url 'due_search_selling' %}">
+                    {% csrf_token %}
+                    <input class="form-control me-2" type="date" placeholder="Search" name="search_selling" aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
+            </div>
+        </div>
+
+	</div>
+
+    <table class="table">
+        <thead>
+			<tr class="table-dark">
+				<th scope="col">Id</th>
+				<th scope="col">Name</th>
+				<th scope="col">Address</th>
+				<th scope="col">Mobile</th>
+				<th scope="col">Total Price</th>
+				<th scope="col">Due</th>
+				<th scope="col">Action</th>
+			</tr>
+        </thead>
+        <tbody>
+            {% if due_queryset %}
+
+            {% for i in due_queryset %}
+            
+            <tr>
+                <th scope="row">{{ i.id }}</th>
+                <td>{{i.customer_name}}</td>
+                <td>{{i.customer_address}}</td>
+                <td>{{i.customer_mobile}}</td>
+                <td>{{i.total_price}}</td>
+                <td>{{i.due}}</td>
+                <td><a href="{% url "due_info" i.id %}" class="btn btn-info btn-sm">Pay</a></td>
+            </tr>
+            
+            {% endfor %}
+
+            {% else %}
+
+            {% for due in due_info %}
+            <tr>
+                <th scope="row">{{ due.id }}</th>
+                <td>{{due.customer_name}}</td>
+                <td>{{due.customer_address}}</td>
+                <td>{{due.customer_mobile}}</td>
+                <td>{{due.total_price}}</td>
+                <td>{{due.due}}</td>
+                <td><a href="{% url "due_info" due.id %}" class="btn btn-info btn-sm">Pay</a></td>
+            </tr>
+            {% endfor %}
+            
+            {% endif %}
+            
+        </tbody>
+    </table>
+    <div class="pagination justify-content-center">
+        <ul class="pagination">
+            {% if due_info.has_previous %}
+                <li class="page-item">
+                    <a href="?page=1" class="page-link">&laquo; First</a>
+                </li>
+                <li class="page-item">
+                    <a href="?page={{ due_info.previous_page_number }}" class="page-link">Previous</a>
+                </li>
+            {% endif %}
+    
+            {% for num in due_info.paginator.page_range %}
+                <li class="page-item {% if num == due_info.number %}active{% endif %}">
+                    <a href="?page={{ num }}" class="page-link">{{ num }}</a>
+                </li>
+            {% endfor %}
+    
+            {% if due_info.has_next %}
+                <li class="page-item">
+                    <a href="?page={{ due_info.next_page_number }}" class="page-link">Next</a>
+                </li>
+                <li class="page-item">
+                    <a href="?page={{ due_info.paginator.num_pages }}" class="page-link">&raquo; Last</a>
+                </li>
+            {% endif %}
+        </ul>
+    </div>
+</div>
+
+{% endblock content %}

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bricks Factory</title>
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+</head>
+<body>
+
+    <header>
+        
+        <nav class="navbar navbar-expand-lg" style="background-color: #e3f2fd;">
+            <div class="container-fluid">
+                <a class="navbar-brand text-dark" href="{% url "home" %}"><b>{{ profile.cname }}</b></a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav m-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link" aria-current="page" href="#">Mobile: {{ profile.cmobile }}</a>
+                        </li>
+                        <li class="nav-item" style="margin-left: 50px;">
+                            <a class="nav-link" aria-current="page" href="#">Address: {{ profile.caddress }}</a>
+                        </li>
+                    </ul>
+        
+                    <div class="d-flex" role="search">
+                        <a href="{% url 'company' %}" class="nav-link text-dark">Company Profile</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="mt-2">
+        <nav class="navbar navbar-expand-lg bg-dark">
+            <div class="container-fluid">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav m-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link active text-light" aria-current="page" href="{% url 'home' %}">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active text-light" aria-current="page" href="{% url 'selling' %}">Selling</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active text-light" aria-current="page" href="{% url 'delivery' %}">Delivery</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active text-light" aria-current="page" href="{% url 'production' %}">Daily Production</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active text-light" aria-current="page" href="{% url 'raw_materials' %}">Raw Matrials</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active text-light" aria-current="page" href="{% url 'labours' %}">Labours</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active text-light" aria-current="page" href="{% url 'accounts' %}">Accounts</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+    
+    {% block content %}
+    
+    {% endblock content %}
+
+
+    <footer>
+        <div class="card-footer text-center p-3 mt-3">
+            <span class="text-primary"><span>&#169</span> COPYRIGHTS</span> reserved by Touhid.
+        </div>
+    </footer>
+
+
+    <script src="{% static 'bootstrap/js/jquery.js' %}"></script>
+    <script src="{% static 'bootstrap/js/popper.js' %}"></script>
+    <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+</body>
+</html>

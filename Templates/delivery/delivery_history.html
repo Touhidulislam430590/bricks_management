@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <h2 class="text-center">Delivery History List</h2>
+
+    <div class="row">
+        <div class="col-md-2">
+            <a href="{% url 'delivery' %}" class="btn btn-outline-primary mt-3 mb-3">Back</a>
+        </div>
+        <div class="col-md-2"></div>
+        <div class="col-md-2"></div>
+        <div class="col-md-2"></div>
+        <div class="col-md-4">
+            <form class="d-flex" role="search" method="POST" action="{% url 'search_delivery' %}">
+                {% csrf_token %}
+                <input class="form-control me-2" type="date" placeholder="Search" name="search_selling" aria-label="Search">
+                <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>
+        </div>
+    </div>
+
+    
+
+    {% if due_queryset %}
+    <table class="table table-striped">
+        <thead>
+            <tr class="table-info">
+                <th scope="col">Id</th>
+                <th scope="col">Delivery Time</th>
+                <th scope="col">SL No.</th>
+                <th scope="col">Customer Name</th>
+                <th scope="col">Customer Mobile</th>
+                <th scope="col">Delivery Amount<br> (In Thousand)</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            {% for j in due_queryset %}
+            
+            <tr>
+                <th scope="row">{{j.id}}</th>
+                <td>{{j.created}}</td>
+                <td>{{j.delivery.selling_id}}</td>
+                <td>{{j.delivery.customer_name}}</td>
+                <td>{{j.delivery.customer_mobile}}</td>
+                <td>{{j.delivery_amount}}</td>
+            </tr>
+            
+            {% endfor %}
+        </tbody>
+    </table>
+
+    {% else %}
+    <table class="table table-striped">
+        <thead>
+            <tr class="table-info">
+                <th scope="col">Id</th>
+                <th scope="col">Delivery Time</th>
+                <th scope="col">SL No.</th>
+                <th scope="col">Customer Name</th>
+                <th scope="col">Customer Mobile</th>
+                <th scope="col">Delivery Amount<br> (In Thousand)</th>
+            </tr>
+        </thead>
+        <tbody>
+            
+            
+            {% for i in all_history %}
+            <tr>
+                <th scope="row">{{i.id}}</th>
+                <td>{{i.created}}</td>
+                <td>{{i.delivery.selling_id}}</td>
+                <td>{{i.delivery.customer_name}}</td>
+                <td>{{i.delivery.customer_mobile}}</td>
+                <td>{{i.delivery_amount}}</td>
+            </tr>
+            {% endfor %}
+
+        </tbody>
+    </table>
+
+    <div class="pagination justify-content-center">
+        <ul class="pagination">
+            {% if all_history.has_previous %}
+                <li class="page-item">
+                    <a href="?page=1" class="page-link">&laquo; First</a>
+                </li>
+                <li class="page-item">
+                    <a href="?page={{ all_history.previous_page_number }}" class="page-link">Previous</a>
+                </li>
+            {% endif %}
+    
+            {% for num in all_history.paginator.page_range %}
+                <li class="page-item {% if num == all_history.number %}active{% endif %}">
+                    <a href="?page={{ num }}" class="page-link">{{ num }}</a>
+                </li>
+            {% endfor %}
+    
+            {% if all_history.has_next %}
+                <li class="page-item">
+                    <a href="?page={{ all_history.next_page_number }}" class="page-link">Next</a>
+                </li>
+                <li class="page-item">
+                    <a href="?page={{ all_history.paginator.num_pages }}" class="page-link">&raquo; Last</a>
+                </li>
+            {% endif %}
+        </ul>
+    </div>
+
+            {% endif %}
+
+
+    
+</div>
+{% endblock content %}

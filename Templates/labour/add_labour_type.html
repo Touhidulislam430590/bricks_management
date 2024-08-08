@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container">
+    <h2 class="text-center">Create Labour Type</h2>
+    
+    <div class="mt-2 mb-2">
+		<a href="{% url 'labours' %}" class="btn btn-outline-primary">Back</a>
+	</div>
+
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group mb-3">
+            <label for="title">Title:</label>
+            <input type="text" class="form-control" id="title" name="title" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+
+    <div class="mt-3">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Issue Date</th>
+                </tr>
+            </thead>
+            {% if labour_type %}
+            <tbody>
+                {% for i in labour_type %}
+                <tr>
+                    <th scope="row">{{i.id}}</th>
+                    <td>{{i.title}}</td>
+                    <td>{{i.issue_date}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            {% endif %}
+        </table>
+        <div class="pagination justify-content-center">
+            <ul class="pagination">
+                {% if labour_type.has_previous %}
+                    <li class="page-item">
+                        <a href="?page=1" class="page-link">&laquo; First</a>
+                    </li>
+                    <li class="page-item">
+                        <a href="?page={{ labour_type.previous_page_number }}" class="page-link">Previous</a>
+                    </li>
+                {% endif %}
+        
+                {% for num in labour_type.paginator.page_range %}
+                    <li class="page-item {% if num == labour_type.number %}active{% endif %}">
+                        <a href="?page={{ num }}" class="page-link">{{ num }}</a>
+                    </li>
+                {% endfor %}
+        
+                {% if labour_type.has_next %}
+                    <li class="page-item">
+                        <a href="?page={{ labour_type.next_page_number }}" class="page-link">Next</a>
+                    </li>
+                    <li class="page-item">
+                        <a href="?page={{ labour_type.paginator.num_pages }}" class="page-link">&raquo; Last</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

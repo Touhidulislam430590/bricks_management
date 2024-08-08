@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <h2 class="text-center">Delivery Pending List</h2>
+
+    <div class="row">
+        <div class="col-md-2">
+            <a href="{% url 'delivery_done' %}" class="btn btn-outline-primary mt-3 mb-3">Complete Delivery</a>
+        </div>
+        <div class="col-md-2">
+            <a href="{% url 'delivery_report' %}" class="btn btn-outline-primary mt-3 mb-3">Delivery History</a>
+        </div>
+        <div class="col-md-2"></div>
+        <div class="col-md-2"></div>
+        <div class="col-md-4">
+            <form class="d-flex" role="search" method="GET" action="{% url 'delivery_search' %}">
+                {% csrf_token %}
+                <input class="form-control me-2" type="text" placeholder="Search by ID" name="search_id" aria-label="Search">
+                <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>
+        </div>
+    </div>
+
+
+    <table class="table table-striped">
+        <thead>
+            <tr class="table-info">
+                <th scope="col">SL No.</th>
+                <th scope="col">Name</th>
+                <th scope="col">Address</th>
+                <th scope="col">Mobile</th>
+                <th scope="col">Total Quantity (In Thousand)</th>
+                <th scope="col">Pending (In Thousand)</th>
+                <th scope="col">Delivered (In Thousand)</th>
+                <th scope="col">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            
+            {% for i in delivery %}
+            <tr>
+                <th scope="row">{{i.selling_id}}</th>
+                <td>{{i.customer_name}}</td>
+                <td>{{i.customer_address}}</td>
+                <td>{{i.customer_mobile}}</td>
+                <td>{{i.product_quantity}}</td>
+                <td>{{i.pending_delivery}}</td>
+                <td>{{i.delivered}}</td>
+                <td><a href="{% url 'delivery_details' i.id %}" class="btn btn-primary btn-sm">Details</a></td>
+            </tr>
+            {% endfor %}
+
+        </tbody>
+    </table>
+    <div class="pagination justify-content-center">
+        <ul class="pagination">
+            {% if delivery.has_previous %}
+                <li class="page-item">
+                    <a href="?page=1" class="page-link">&laquo; First</a>
+                </li>
+                <li class="page-item">
+                    <a href="?page={{ delivery.previous_page_number }}" class="page-link">Previous</a>
+                </li>
+            {% endif %}
+    
+            {% for num in delivery.paginator.page_range %}
+                <li class="page-item {% if num == delivery.number %}active{% endif %}">
+                    <a href="?page={{ num }}" class="page-link">{{ num }}</a>
+                </li>
+            {% endfor %}
+    
+            {% if delivery.has_next %}
+                <li class="page-item">
+                    <a href="?page={{ delivery.next_page_number }}" class="page-link">Next</a>
+                </li>
+                <li class="page-item">
+                    <a href="?page={{ delivery.paginator.num_pages }}" class="page-link">&raquo; Last</a>
+                </li>
+            {% endif %}
+        </ul>
+    </div>
+</div>
+{% endblock content %}

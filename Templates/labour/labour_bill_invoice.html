@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        
+        <header class="m-0 p-0">
+            {% if profile %}
+            <h2 class="text-center m-0 p-0">{{ profile.cname }}</h2>
+            <h5 class="text-center m-0 p-0">ADDRESS: {{profile.caddress}}</h5>
+            <h5 class="text-center m-0 p-0">MOBILE: {{profile.cmobile}}</h5>
+            {% endif %}
+        </header>
+        
+        <div class="row">
+            <div class="col-sm-10"><h5>Employee Bill Invoice</h5></div>
+            <div class="col-sm-2"><button type="button" id="hideButton" onclick="printBtn()" class="btn btn-primary ps-2 pe-2">Click To Print</button></div>
+        </div>
+
+        <main>
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    {% if labour_info %}
+                    <div class="border p-2 border-dark">
+                        <table>
+                            <tr>
+                                <td><b>Serial Number</b></td>
+                                <td class="ps-3 pe-3">:</td>
+                                <td> {{ invoice_history.id }}</td>
+                            </tr>
+                            <tr>
+                                <td><b>Sarder Name</b></td>
+                                <td class="ps-3 pe-3">:</td>
+                                <td> {{labour_info.sarder_name}}</td>
+                            </tr>
+                            <tr>
+                                <td><b>Employee Type</b></td>
+                                <td class="ps-3 pe-3">:</td>
+                                <td>{{labour_info.labour_type}}</td>
+                            </tr>
+                        </table>
+                    </div>
+                    {% endif %}
+                </div>
+                
+                <div class="col-sm-6">
+                    <div class="border p-2 border-dark">
+                        <table>
+                            <tr>
+                                <td><b>Date</b></td>
+                                <td class="ps-3 pe-3">:</td>
+                                <td>{{invoice_history.date}}</td>
+                            </tr>
+                            <tr>
+                                <td><b>Work Start</b></td>
+                                <td class="ps-3 pe-3">:</td>
+                                <td>{{labour_info.starting_date}}</td>
+                            </tr>
+                            <tr>
+                                <td><b>Work Complete</b></td>
+                                <td class="ps-3 pe-3">:</td>
+                                <td>{{labour_info.closing_date}}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="mt-1 border border-dark">
+                <table class="table table-borderless m-0 p-0">
+                    <tr class="m-0 p-0">
+                        <td class="m-0 p-0">Rate (In Thousand)</td>
+                        <td class="ps-3 pe-3 m-0 p-0">:</td>
+                        <td class="m-0 p-0">{{labour_info.rate}}</td>
+                        <td class="ps-5 pe-5 m-0 p-0"></td>
+                        <td class="m-0 p-0">Total Price</td>
+                        <td class="ps-3 pe-3 m-0 p-0">:</td>
+                        <td class="m-0 p-0">{{pending_bill}}</td>
+                    </tr>
+
+                    <tr class="border-bottom border-dark m-0 p-0">
+                        <td class="m-0 p-0">Production Quantity</td>
+                        <td class="ps-3 pe-3 m-0 p-0">:</td>
+                        <td class="m-0 p-0">{{bill_info.production}}</td>
+                        <td class="ps-5 pe-5 m-0 p-0"></td>
+                        <td class="m-0 p-0">Payment</td>
+                        <td class="ps-3 pe-3 m-0 p-0">:</td>
+                        <td class="m-0 p-0">{{invoice_history.bill_amount}}</td>
+                    </tr>
+
+                    <tr class="p-0 m-0">
+                        <td class="m-0 p-0">Total Price</td>
+                        <td class="ps-3 pe-3 m-0 p-0">:</td>
+                        <td class="m-0 p-0">{{pending_bill}}</td>
+                        <td class="ps-5 pe-5 m-0 p-0"></td>
+                        <td class="m-0 p-0">Due</td>
+                        <td class="ps-3 pe-3 m-0 p-0">:</td>
+                        <td class="m-0 p-0">{{bill_info.due_bill}}</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="mt-3 mb-2 ">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <p class="text-center"><b>Customer</b></p>
+                        
+                        <p class="text-center m-0 p-0">-----------------------------------</p>
+                        <p class="text-center m-0 p-0">Signature</p>
+                    </div>
+                    <div class="col-sm-4">
+                        <p class="text-center"><b>Operator</b></p>
+                        
+                        <p class="text-center m-0 p-0">-----------------------------------</p>
+                        <p class="text-center m-0 p-0">Signature</p>
+                    </div>
+                    <div class="col-sm-4">
+                        <p class="text-center"><b>Manager</b></p>
+                        
+                        <p class="text-center m-0 p-0">-----------------------------------</p>
+                        <p class="text-center m-0 p-0">Signature</p>
+                    </div>
+                </div>
+            </div>
+            
+        </main>
+
+        <footer class="border-top border-bottom m-0 p-0">
+            <p class="text-center m-0 p-0">This System is powered by Touhid IT Solutions. Visit for more details www.touhid.com</p>
+        </footer>
+    </div>
+
+    <script>
+        function printBtn(){
+            // Get the button element by its ID
+            const hideButton = document.getElementById('hideButton');
+            // Hide the button by adding a 'hidden' class
+            hideButton.classList.add('hidden');
+            window.print();
+        }
+    </script>
+
+    <script src="{% static 'bootstrap/js/jquery.js' %}"></script>
+    <script src="{% static 'bootstrap/js/popper.js' %}"></script>
+    <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+</body>
+</html>

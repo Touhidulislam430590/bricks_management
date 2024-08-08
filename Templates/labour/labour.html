@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container-fluid">
+    <h2 class="text-center">Labours List</h2>
+
+    <div class="row">
+        <div class="col-md-8">
+            <a href="{% url "add_type" %}" class="btn btn-outline-success me-3">Add New Type</a>
+            <a href="{% url "new_deal" %}" class="btn btn-outline-warning me-3">New Deals</a>
+            <a href="{% url "due_labour" %}" class="btn btn-outline-info me-3">Due Bill</a>
+            <a href="{% url "labour_bill_history" %}" class="btn btn-outline-primary me-3">Payment History</a>
+            <a href="{% url "complete_bills" %}" class="btn btn-outline-warning me-3">Complete Payment</a>
+        </div>
+        <div class="col-md-4"></div>
+    </div>
+
+    <table class="table table-striped mt-3">
+        <thead>
+            <tr class="table-primary">
+                <th scope="col">#</th>
+                <th scope="col">Labour Type</th>
+                <th scope="col">Sarder Name</th>
+                <th scope="col">Payment Sequence</th>
+                <th scope="col">Production/Target</th>
+                <th scope="col">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if deals %}
+            {% for i in deals %}
+            <tr>
+                <td>{{i.id}}</td>
+                <td>{{i.labour_type}}</td>
+                <td>{{i.sarder_name}}</td>
+                <td>{{i.payment_sequence}}</td>
+                <td>{{i.complete_production}} / {{i.season_target}}</td>
+                <td><a href="" class="btn btn-sm btn-info">Details</a></td>
+            </tr>
+            {% endfor %}
+            {% endif %}
+            {% comment %} <tr>
+                <td>1</td>
+                <td>Bricks Input</td>
+                <td>Ali</td>
+                <td>Weekly</td>
+                <td>32000/6500000</td>
+                <td><a href="" class="btn btn-sm btn-info">Details</a></td>
+            </tr> {% endcomment %}
+        </tbody>
+    </table>
+    <div class="pagination justify-content-center">
+        <ul class="pagination">
+            {% if deals.has_previous %}
+                <li class="page-item">
+                    <a href="?page=1" class="page-link">&laquo; First</a>
+                </li>
+                <li class="page-item">
+                    <a href="?page={{ deals.previous_page_number }}" class="page-link">Previous</a>
+                </li>
+            {% endif %}
+    
+            {% for num in deals.paginator.page_range %}
+                <li class="page-item {% if num == deals.number %}active{% endif %}">
+                    <a href="?page={{ num }}" class="page-link">{{ num }}</a>
+                </li>
+            {% endfor %}
+    
+            {% if deals.has_next %}
+                <li class="page-item">
+                    <a href="?page={{ deals.next_page_number }}" class="page-link">Next</a>
+                </li>
+                <li class="page-item">
+                    <a href="?page={{ deals.paginator.num_pages }}" class="page-link">&raquo; Last</a>
+                </li>
+            {% endif %}
+        </ul>
+    </div>
+</div>
+
+{% endblock content %}

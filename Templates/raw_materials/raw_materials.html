@@ -1,0 +1,353 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid">
+<h2 class="text-center mt-2 mb-4">Counting Raw Materials</h2>
+
+<div class="row">
+    <div class="col-md-4">
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-outline-primary me-2" data-bs-toggle="modal" data-bs-target="#modalSoil">Buy Soil</button>
+        <button type="button" class="btn btn-outline-primary me-2" data-bs-toggle="modal" data-bs-target="#modalPetroleum">Buy Petroleum</button>
+    </div>
+    
+    <div class="col-md-4">
+        <a href="{% url 'due_materials' %}" class="btn btn-outline-primary me-2">Due Materials</a>
+        <a href="{% url 'material_payment_history' %}" class="btn btn-outline-primary me-2">Payment History</a>
+    </div>
+    
+    <div class="col-md-4">
+        <form class="d-flex" role="search" method="POST" action="{% url 'search_raw_materials' %}">
+            {% csrf_token %}
+            <input class="form-control me-2" type="date" placeholder="Search" name="search_raw_materials" aria-label="Search">
+            <button class="btn btn-outline-success" type="submit">Search</button>
+        </form>
+    </div>
+</div>
+
+    <!-- Modal for Soil -->
+    <div class="modal bd-example-modal-lg fade" id="modalSoil" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Buy Soil</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                
+                <div class="modal-body">
+                    <form action="{% url 'soil' %}" method="POST">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="mb-3">
+                                    <label for="" class="form-label">Vendor Name</label>
+                                    <input type="text" name="vendor_name" class="form-control" id="" aria-describedby="">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label for="" class="form-label">Date</label>
+                                    <input type="date" name="" class="form-control" id="datePicker" aria-describedby="" readonly>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="" class="form-label">Sarder Name</label>
+                            <input type="text" name="sarder_name" class="form-control" id="" aria-describedby="">
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label for="" class="form-label">Quantity</label>
+                                    <input type="number" name="quantity" class="form-control" id="" aria-describedby="">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label for="" class="form-label">Rate</label>
+                                    <input type="number" name="rate" onkeyup="calculateTotal()" step="0.01" class="form-control" id="" aria-describedby="">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label for="" class="form-label">Total Price</label>
+                                    <input type="number" name="total_price" class="form-control" id="" aria-describedby="" readonly>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="" class="form-label">Payment</label>
+                                    <input type="text" name="payment" onkeyup="dueCalculate()" class="form-control" id="" aria-describedby="">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="" class="form-label">Due</label>
+                                    <input type="text" name="due" readonly class="form-control" id="" aria-describedby="">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Modal for Petroleum -->
+    <div class="modal bd-example-modal-lg fade" id="modalPetroleum" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Buy Petroleum</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="{% url 'petroleum' %}" method="POST">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="petroleum_type" class="form-label">Petroleum Type</label>
+                                    <select id="" class="form-select" name="petroleum_Type">
+                                        <option selected>Select Petroleum Type</option>
+                                        <option value="Coal">Coal</option>
+                                        <option value="Wood">Wood</option>
+                                    </select>
+                                </div>
+                            </div>
+    
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="" class="form-label">Date</label>
+                                    <input type="date" name="" class="form-control" id="datePicker2" aria-describedby="" readonly>
+                                </div>
+                            </div>
+                        </div>
+    
+                        <div class="mb-3">
+                            <label for="" class="form-label">Vendor Name</label>
+                            <input type="text" name="vendor_name2" class="form-control" id="" aria-describedby="">
+                        </div>
+    
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label for="" class="form-label">Quantity</label>
+                                    <input type="number" name="quantity2" class="form-control" id="" aria-describedby="">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label for="" class="form-label">Rate</label>
+                                    <input type="number" name="rate2" onkeyup="calculateTotal2()" step="0.01" class="form-control" id="" aria-describedby="">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label for="" class="form-label">Total Price</label>
+                                    <input type="number" name="total_price2" class="form-control" id="" aria-describedby="" readonly>
+                                </div>
+                            </div>
+                        </div>
+    
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="" class="form-label">Payment</label>
+                                    <input type="text" name="payment2" onkeyup="dueCalculate2()" class="form-control" id="" aria-describedby="">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="" class="form-label">Due</label>
+                                    <input type="text" name="due2" readonly class="form-control" id="" aria-describedby="">
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="mt-5">
+        {% if combine_queryset %}
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Issue Date</th>
+                    <th>Petroleum Type</th>
+                    <th>Vendor Name</th>
+                    <th>Quantity</th>
+                    <th>Rate</th>
+                    <th>Total Price</th>
+                    <th>Done Payment</th>
+                    <th>Due</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in combine_queryset %}
+                <tr>
+                    <td>{{ i.issue_date }}</td>
+                    {% if i.petroleum_type %}
+                    <td>{{ i.petroleum_type }}</td>
+                    {% else %}
+                    <td>Soil</td>
+                    {% endif %}
+                    <td>{{ i.vendor_name }}</td>
+                    <td>{{ i.quantity }}</td>
+                    <td>{{ i.rate }}</td>
+                    <td>{{ i.total_price }}</td>
+                    <td>{{ i.done_payment }}</td>
+                    <td>{{ i.due }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+        {% else %}
+        
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Issue Date</th>
+                    <th>Petroleum Type</th>
+                    <th>Vendor Name</th>
+                    <th>Quantity</th>
+                    <th>Rate</th>
+                    <th>Total Price</th>
+                    <th>Done Payment</th>
+                    <th>Due</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in combine_data %}
+                <tr>
+                    <td>{{ item.issue_date }}</td>
+                    {% if item.petroleum_type %}
+                    <td>{{ item.petroleum_type }}</td>
+                    {% else %}
+                    <td>Soil</td>
+                    {% endif %}
+                    <td>{{ item.vendor_name }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>{{ item.rate }}</td>
+                    <td>{{ item.total_price }}</td>
+                    <td>{{ item.done_payment }}</td>
+                    <td>{{ item.due }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="pagination justify-content-center">
+            <ul class="pagination">
+                {% if combine_data.has_previous %}
+                    <li class="page-item">
+                        <a href="?page=1" class="page-link">&laquo; First</a>
+                    </li>
+                    <li class="page-item">
+                        <a href="?page={{ combine_data.previous_page_number }}" class="page-link">Previous</a>
+                    </li>
+                {% endif %}
+        
+                {% for num in combine_data.paginator.page_range %}
+                    <li class="page-item {% if num == combine_data.number %}active{% endif %}">
+                        <a href="?page={{ num }}" class="page-link">{{ num }}</a>
+                    </li>
+                {% endfor %}
+        
+                {% if combine_data.has_next %}
+                    <li class="page-item">
+                        <a href="?page={{ combine_data.next_page_number }}" class="page-link">Next</a>
+                    </li>
+                    <li class="page-item">
+                        <a href="?page={{ combine_data.paginator.num_pages }}" class="page-link">&raquo; Last</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+
+        {% endif %}
+        
+    </div>
+
+
+</div>
+
+<script>
+    document.getElementById('datePicker').valueAsDate = new Date();
+    document.getElementById('datePicker2').valueAsDate = new Date();
+</script>
+
+<script>
+    function calculateTotal() {
+        var rate = parseFloat(document.getElementsByName("rate")[0].value);
+        var quantity = parseFloat(document.getElementsByName("quantity")[0].value);
+        var totalPrice = rate * quantity;
+        document.getElementsByName("total_price")[0].value = totalPrice.toFixed(2);
+    }
+
+    // Submit the form via JavaScript
+    document.getElementById("myForm").addEventListener("submit", function(event) {
+        // Calculate total price before submitting
+        calculateTotal();
+        
+        // Form submission will continue as usual
+    });
+
+    function dueCalculate(){
+        var total_price = parseFloat(document.getElementsByName("total_price")[0].value);
+        var payment = parseFloat(document.getElementsByName("payment")[0].value);
+
+        var due = total_price - payment;
+
+        document.getElementsByName('due')[0].value = due.toFixed(2);
+    }
+</script>
+
+
+<script>
+    function calculateTotal2() {
+        var rate = parseFloat(document.getElementsByName("rate2")[0].value);
+        var quantity = parseFloat(document.getElementsByName("quantity2")[0].value);
+        var totalPrice = rate * quantity;
+        document.getElementsByName("total_price2")[0].value = totalPrice.toFixed(2);
+    }
+
+    // Submit the form via JavaScript
+    document.getElementById("myForm").addEventListener("submit", function(event) {
+        // Calculate total price before submitting
+        calculateTotal2();
+        
+        // Form submission will continue as usual
+    });
+
+    function dueCalculate2(){
+        var total_price = parseFloat(document.getElementsByName("total_price2")[0].value);
+        var payment = parseFloat(document.getElementsByName("payment2")[0].value);
+
+        var due = total_price - payment;
+
+        document.getElementsByName('due2')[0].value = due.toFixed(2);
+    }
+</script>
+
+{% endblock content %}

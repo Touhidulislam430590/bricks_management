@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container-fluid">
+    <h2 class="text-center">Bill Payment History</h2>
+    <div class="row">
+        <div class="col-md-3">
+            <a href="{% url 'labours' %}" class="btn btn-outline-primary">Back</a>
+        </div>
+        <div class="col-md-3"></div>
+        <div class="col-md-3"></div>
+        <div class="col-md-3">
+            <form class="d-flex" role="search" method="POST" action="{% url 'history_search' %}">
+                {% csrf_token %}
+                <input class="form-control me-2" type="date" placeholder="Search" name="search_by_id" aria-label="Search">
+                <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>
+        </div>
+    </div>
+
+
+    <div class="mt-3">
+        
+        {% if queryset %}
+
+        <table class="table">
+            <thead class="table-primary">
+                <tr>
+                    <th scope="col">Serial</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Sarder Name</th>
+                    <th scope="col">Working Type</th>
+                    <th scope="col">Payment</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in queryset %}
+                <tr>
+                    <td>{{ i.id }}</td>
+                    <td>{{ i.date }}</td>
+                    <td>{{ i.labour_deal.sarder_name }}</td>
+                    <td>{{ i.labour_deal.labour_type }}</td>
+                    <td>{{ i.bill_amount }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+        {% else %}
+
+        <table class="table">
+            <thead class="table-primary">
+                <tr>
+                    <th scope="col">Serial</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Sarder Name</th>
+                    <th scope="col">Working Type</th>
+                    <th scope="col">Payment</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in page_data %}
+                <tr>
+                    <td>{{ item.id }}</td>
+                    <td>{{ item.date }}</td>
+                    <td>{{ item.labour_deal.sarder_name }}</td>
+                    <td>{{ item.labour_deal.labour_type }}</td>
+                    <td>{{ item.bill_amount }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    
+        <div class="pagination justify-content-center">
+            <ul class="pagination">
+                {% if page_data.has_previous %}
+                    <li class="page-item">
+                        <a href="?page=1" class="page-link">&laquo; First</a>
+                    </li>
+                    <li class="page-item">
+                        <a href="?page={{ page_data.previous_page_number }}" class="page-link">Previous</a>
+                    </li>
+                {% endif %}
+        
+                {% for num in page_data.paginator.page_range %}
+                    <li class="page-item {% if num == page_data.number %}active{% endif %}">
+                        <a href="?page={{ num }}" class="page-link">{{ num }}</a>
+                    </li>
+                {% endfor %}
+        
+                {% if page_data.has_next %}
+                    <li class="page-item">
+                        <a href="?page={{ page_data.next_page_number }}" class="page-link">Next</a>
+                    </li>
+                    <li class="page-item">
+                        <a href="?page={{ page_data.paginator.num_pages }}" class="page-link">&raquo; Last</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+        
+        {% endif %}
+        
+
+
+
+    </div>
+    
+</div>
+
+{% endblock content %}

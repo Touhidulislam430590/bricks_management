@@ -1,0 +1,168 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+<div class="container-fluid">
+    <h2 class="text-center mt-2 mb-4">Daily Production</h2>
+
+    <div class="row">
+        <div class="col-md-3">
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-outline-primary me-2" data-bs-toggle="modal" data-bs-target="#modalSoil">Add Report</button>
+            
+            <!-- Modal for Soil -->
+            <div class="modal bd-example-modal-lg fade" id="modalSoil" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">Add Report</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        
+                        <div class="modal-body">
+                            <form action="{% url 'production' %}" method="POST">
+                                {% csrf_token %}
+                                    
+                                <div class="mb-3">
+                                    <select class="form-select" name="labour_instance" aria-label="Default select example">
+                                        <option selected>Open this select menu</option>
+                                        {% for labour_deal in labour %}
+                                        <option value="{{ labour_deal.id }}">{{ labour_deal }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="" class="form-label">Production</label>
+                                    <input type="text" name="production" class="form-control" id="" aria-describedby="">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="" class="form-label">Description</label>
+                                    <textarea class="form-control" name="description" id="exampleFormControlTextarea1" rows="4"></textarea>
+                                </div>
+
+                                
+                            </div>
+                            
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-3"></div>
+        <div class="col-md-3"></div>
+
+        <div class="col-md-3">
+            <form class="d-flex" role="search" method="POST" action="{% url 'search_production' %}">
+                {% csrf_token %}
+                <input class="form-control me-2" type="date" placeholder="Search" name="search_production" aria-label="Search">
+                <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>
+        </div>
+    </div>
+    
+    
+
+        
+    
+    <div class="mt-5">
+
+        {% if queryset %}
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>SL No.</th>
+                    <th>Date</th>
+                    <th>Labour Type</th>
+                    <th>Sarder Name</th>
+                    <th>Production</th>
+                    <th>Description</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for j in queryset %}
+                <tr>
+                    <td>{{ j.id }}</td>
+                    <td>{{ j.issue_date }}</td>
+                    <td>{{ j.labour_instance.labour_type }}</td>
+                    <td>{{ j.labour_instance.sarder_name }}</td>
+                    <td>{{ j.production }}</td>
+                    <td>{{ j.description }}</td>
+                    <td><a href="#" class="btn btn-sm btn-primary">Details</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>        
+        
+        {% else %}
+        
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>SL No.</th>
+                    <th>Date</th>
+                    <th>Labour Type</th>
+                    <th>Sarder Name</th>
+                    <th>Production</th>
+                    <th>Description</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in production_data %}
+                <tr>
+                    <td>{{ item.id }}</td>
+                    <td>{{ item.issue_date }}</td>
+                    <td>{{ item.labour_instance.labour_type }}</td>
+                    <td>{{ item.labour_instance.sarder_name }}</td>
+                    <td>{{ item.production }}</td>
+                    <td>{{ item.description }}</td>
+                    <td><a href="#" class="btn btn-sm btn-primary">Details</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="pagination justify-content-center">
+            <ul class="pagination">
+                {% if production_data.has_previous %}
+                    <li class="page-item">
+                        <a href="?page=1" class="page-link">&laquo; First</a>
+                    </li>
+                    <li class="page-item">
+                        <a href="?page={{ production_data.previous_page_number }}" class="page-link">Previous</a>
+                    </li>
+                {% endif %}
+        
+                {% for num in production_data.paginator.page_range %}
+                    <li class="page-item {% if num == production_data.number %}active{% endif %}">
+                        <a href="?page={{ num }}" class="page-link">{{ num }}</a>
+                    </li>
+                {% endfor %}
+        
+                {% if production_data.has_next %}
+                    <li class="page-item">
+                        <a href="?page={{ production_data.next_page_number }}" class="page-link">Next</a>
+                    </li>
+                    <li class="page-item">
+                        <a href="?page={{ production_data.paginator.num_pages }}" class="page-link">&raquo; Last</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+        
+        {% endif %}
+        
+    </div>
+
+
+</div>
+
+{% endblock content %}

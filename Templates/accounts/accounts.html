@@ -1,0 +1,210 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container-fluid pt-1">
+    <h2 class="text-center">All Over Account Here</h2>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="">
+                <a href="{% url 'miscelleneous' %}" class="btn btn-outline-success me-2">Miscellenous</a>
+            </div>
+        </div>
+        <div class="col-md-3"></div>
+        <div class="col-md-3">
+            <form class="d-flex" role="search" method="POST" action="{% url 'search_accounts' %}">
+                {% csrf_token %}
+                <input class="form-control me-2" type="date" placeholder="Search" name="account_date" aria-label="Search">
+                <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="row mt-3">
+        <div class="col-md-6 pe-5">
+            <h5 class="text-center">Debited Amount</h5>
+            {% if debit_queryset %}
+
+            <table class="table">
+                <thead>
+                    <tr class="table-primary">
+                        <th scope="col">Date</th>
+                        <th scope="col">Debited By</th>
+                        <th scope="col">Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for a in debit_queryset %}
+                    <tr>
+                        <th scope="row">{{a.issue_date}}</th>
+                        <td>{{a.customer_name}}</td>
+                        <td>{{a.amount}}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            
+            {% else %}
+            
+            <table class="table">
+                <thead>
+                    <tr class="table-primary">
+                        <th scope="col">Date</th>
+                        <th scope="col">Debited By</th>
+                        <th scope="col">Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for i in debit_data %}
+                    <tr>
+                        <th scope="row">{{i.issue_date}}</th>
+                        <td>{{i.customer_name}}</td>
+                        <td>{{i.amount}}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <div class="pagination justify-content-center">
+                <ul class="pagination">
+                    {% if debit_data.has_previous %}
+                        <li class="page-item">
+                            <a href="?page=1" class="page-link">&laquo; First</a>
+                        </li>
+                        <li class="page-item">
+                            <a href="?page={{ debit_data.previous_page_number }}" class="page-link">Previous</a>
+                        </li>
+                    {% endif %}
+            
+                    {% for num in debit_data.paginator.page_range %}
+                        <li class="page-item {% if num == debit_data.number %}active{% endif %}">
+                            <a href="?page={{ num }}" class="page-link">{{ num }}</a>
+                        </li>
+                    {% endfor %}
+            
+                    {% if debit_data.has_next %}
+                        <li class="page-item">
+                            <a href="?page={{ debit_data.next_page_number }}" class="page-link">Next</a>
+                        </li>
+                        <li class="page-item">
+                            <a href="?page={{ debit_data.paginator.num_pages }}" class="page-link">&raquo; Last</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+
+            {% endif %}
+            
+        </div>
+
+        <div class="col-md-6 ps-5">
+            <h5 class="text-center">Credited Amount</h5>
+            {% if combine_queryset %}
+
+            <table class="table">
+                <thead>
+                    <tr class="table-info">
+                        <th scope="col">Date</th>
+                        <th scope="col">Credited For</th>
+                        <th scope="col">Amount</th>
+                    </tr>
+                </thead>
+                
+                <tbody>
+                    {% for j in combine_queryset %}
+                    <tr>
+                        <th scope="row">{{j.date}}</th>
+
+                        {% if j.title %}
+                            <td>{{j.title}}</td>                        
+                        {% elif j.labour_deal %}
+                            <td>{{j.labour_deal.sarder_name}}</td>                        
+                        {% elif j.vendor_name %}
+                            <td>{{j.vendor_name}}</td>
+                        {% else %}
+                            <td>Null Data</td>
+                        {% endif %}
+
+                        {% if j.amount %}
+                            <td>{{j.amount}}</td>
+                        {% elif j.bill_amount %}
+                            <td>{{j.bill_amount}}</td>
+                        {% endif %}
+
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            
+            {% else %}
+
+            <table class="table">
+                <thead>
+                    <tr class="table-info">
+                        <th scope="col">Date</th>
+                        <th scope="col">Credited For</th>
+                        <th scope="col">Amount</th>
+                    </tr>
+                </thead>
+                
+                <tbody>
+                    {% for i in sorted_credit %}
+                    <tr>
+                        <th scope="row">{{i.date}}</th>
+
+                        {% if i.title %}
+                            <td>{{i.title}}</td>                        
+                        {% elif i.labour_deal %}
+                            <td>{{i.labour_deal.sarder_name}}</td>                        
+                        {% elif i.vendor_name %}
+                            <td>{{i.vendor_name}}</td>
+                        {% else %}
+                            <td>Null Data</td>
+                        {% endif %}
+
+                        {% if i.amount %}
+                            <td>{{i.amount}}</td>
+                        {% elif i.bill_amount %}
+                            <td>{{i.bill_amount}}</td>
+                        {% endif %}
+
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <div class="pagination justify-content-center">
+                <ul class="pagination">
+                    {% if sorted_credit.has_previous %}
+                        <li class="page-item">
+                            <a href="?page=1" class="page-link">&laquo; First</a>
+                        </li>
+                        <li class="page-item">
+                            <a href="?page={{ sorted_credit.previous_page_number }}" class="page-link">Previous</a>
+                        </li>
+                    {% endif %}
+            
+                    {% for num in sorted_credit.paginator.page_range %}
+                        <li class="page-item {% if num == sorted_credit.number %}active{% endif %}">
+                            <a href="?page={{ num }}" class="page-link">{{ num }}</a>
+                        </li>
+                    {% endfor %}
+            
+                    {% if sorted_credit.has_next %}
+                        <li class="page-item">
+                            <a href="?page={{ sorted_credit.next_page_number }}" class="page-link">Next</a>
+                        </li>
+                        <li class="page-item">
+                            <a href="?page={{ sorted_credit.paginator.num_pages }}" class="page-link">&raquo; Last</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+            
+            {% endif %}
+            
+        </div>
+    </div>
+    
+
+</div>
+
+{% endblock content %}

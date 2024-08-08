@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container">
+    <h1 class="text-center text-danger">Warning...!</h1>
+    <p>For starting new season You have to delete some of your old data, Like:</p>
+    <ul>
+        <li>Instant Selling Data</li>
+        <li>Selling History Data</li>
+        <li>Complete Delivery Data</li>
+        <li>Delivery History Data</li>
+        <li>Daily Production Data</li>
+        <li>Raw Materials Data (Which one payment is already complete)</li>
+        <li>Labour Deal Data</li>
+        <li>Labour Payment History Data</li>
+        <li>Labour Complete Payment Data</li>
+        <li>All Miscellenous Data</li>
+    </ul>
+    <h3>Before Delete Our System Will Be Downloaded All Data On Your Local Storage.</h3>
+    
+    <form method="get" action="{% url 'password_required_form' %}">
+        <button type="submit" class="btn btn-danger" name="download" value="csv">Click To Delete Data</button>
+    </form>
+</div>
+
+{% endblock content %}

@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <h2 class="text-center">Employee Paid Bill's</h2>
+
+    <a href="{% url 'labours' %}" class="btn btn-outline-primary">Back</a>
+
+    <div class="mt-5">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>SL No.</th>
+                    <th>Date</th>
+                    <th>Labour Type</th>
+                    <th>Sarder Name</th>
+                    <th>Production</th>
+                    <th>Payment</th>
+                    <th>Due Bill</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in paid_bills %}
+                <tr>
+                    <td>{{ item.id }}</td>
+                    <td>{{ item.issue_date }}</td>
+                    <td>{{ item.labour_instance.labour_type }}</td>
+                    <td>{{ item.labour_instance.sarder_name }}</td>
+                    <td>{{ item.production }}</td>
+                    <td>{{ item.paid_bill }}</td>
+                    <td>{{ item.due_bill }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="pagination justify-content-center">
+            <ul class="pagination">
+                {% if paid_bills.has_previous %}
+                    <li class="page-item">
+                        <a href="?page=1" class="page-link">&laquo; First</a>
+                    </li>
+                    <li class="page-item">
+                        <a href="?page={{ paid_bills.previous_page_number }}" class="page-link">Previous</a>
+                    </li>
+                {% endif %}
+        
+                {% for num in paid_bills.paginator.page_range %}
+                    <li class="page-item {% if num == paid_bills.number %}active{% endif %}">
+                        <a href="?page={{ num }}" class="page-link">{{ num }}</a>
+                    </li>
+                {% endfor %}
+        
+                {% if paid_bills.has_next %}
+                    <li class="page-item">
+                        <a href="?page={{ paid_bills.next_page_number }}" class="page-link">Next</a>
+                    </li>
+                    <li class="page-item">
+                        <a href="?page={{ paid_bills.paginator.num_pages }}" class="page-link">&raquo; Last</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

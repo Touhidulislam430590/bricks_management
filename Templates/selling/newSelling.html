@@ -1,0 +1,140 @@
+<form method='POST'>
+    {% csrf_token %}
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="mb-3">
+                <label for="selling_Type" class="form-label">Selling Type</label>
+                <select id="" class="form-select" name="selling_Type">
+                    <option selected>Select Selling Type</option>
+                    <option value="Instant Selling">Instant Selling</option>
+                    <option value="Advance Selling">Advance Selling</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="mb-3">
+                <label for="bricksType" class="form-label">Bricks Type</label>
+                <select id="" class="form-select" name="bricks_type">
+                    <option selected>Select Bricks Type</option>
+                    <option value="Number 1">Number 1</option>
+                    <option value="Number 2">Number 2</option>
+                    <option value="Number 3">Number 3</option>
+                    <option value="picked">Picked</option>
+                    <option value="Half Bricks">Half Bricks</option>
+                  </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="mb-3">
+                <label for="" class="form-label">Name</label>
+                <input type="text" name="name" class="form-control" id="" aria-describedby="">
+            </div> 
+        </div>
+        <div class="col-md-6">
+            <div class="mb-3">
+                <label for="" class="form-label">Phone</label>
+                <input type="text" name="phone" class="form-control" required placeholder="01XXX-XXXXXX">
+            </div> 
+        </div>
+    </div>
+    
+
+
+    
+    <div class="row">
+
+        <div class="col-md-6">
+            <div class="mb-3">
+                <label for="" class="form-label">Address</label>
+                <input type="text" name="address" class="form-control" id="" aria-describedby="">
+            </div> 
+        </div>
+
+        <div class="col-md-6">
+            <div class="mb-3">
+                <label for="" class="form-label">Rate</label>
+                <input type="number" name="rate" onkeyup="calculateTotal()" class="form-control" pattern="" required placeholder="">
+            </div> 
+        </div>
+
+    </div>
+
+    <div class="row">
+
+        <div class="col-md-6">
+            <div class="mb-3">
+                <label for="" class="form-label">Quantity</label>
+                <input type="number" name="quantity" onkeyup="calculateTotal()" class="form-control" pattern="" id="" aria-describedby="">
+            </div> 
+        </div>
+
+        <div class="col-md-6">
+            <div class="mb-3">
+                <label for="" class="form-label">Total Price</label>
+                <input type="number" name="total_price" class="form-control" pattern="" required placeholder="" readonly>
+            </div> 
+        </div>
+
+    </div>
+
+
+
+    <div class="row">
+
+        <div class="col-md-4">
+            <div class="mb-3">
+                <label for="" class="form-label">Payment</label>
+                <input type="number" onkeyup="dueCalculate()" name="payment" class="form-control" id="" aria-describedby="">
+            </div> 
+        </div>
+
+        <div class="col-md-4">
+            <div class="mb-3">
+                <label for="" class="form-label">Due</label>
+                <input type="number" name="due" class="form-control" pattern="" required placeholder="" readonly>
+            </div> 
+        </div>
+
+        <div class="col-md-4">
+            <div class="mb-3">
+                <label for="" class="form-label">Commission</label>
+                <input type="number" name="commission" class="form-control" value="0" id="" aria-describedby="">
+            </div> 
+        </div>
+
+    </div>
+    
+    
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+
+  <script>
+    function calculateTotal() {
+        var rate = parseFloat(document.getElementsByName("rate")[0].value);
+        var quantity = parseFloat(document.getElementsByName("quantity")[0].value);
+        var totalPrice = rate * quantity;
+        document.getElementsByName("total_price")[0].value = totalPrice.toFixed(2);
+    }
+
+    // Submit the form via JavaScript
+    document.getElementById("myForm").addEventListener("submit", function(event) {
+        // Calculate total price before submitting
+        calculateTotal();
+        
+        // Form submission will continue as usual
+    });
+
+    function dueCalculate(){
+        var total_price = parseFloat(document.getElementsByName("total_price")[0].value);
+        var payment = parseFloat(document.getElementsByName("payment")[0].value);
+
+        var due = total_price - payment;
+
+        document.getElementsByName('due')[0].value = due.toFixed(2);
+    }
+</script>

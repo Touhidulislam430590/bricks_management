@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container">
+    <h2 class="text-center">Add New Deal</h2>
+
+    <div class="mt-2 mb-2">
+		<a href="{% url 'labours' %}" class="btn btn-outline-primary">Back</a>
+	</div>
+
+    <div class="mt-2">
+        <form action="" method="POST">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="labour_type" class="form-label">Labour Type</label>
+                <select class="form-select" id="labour_type" name="labour_type">
+                    <option selected>Select Labour Types</option>
+                    {% for labour_type in labour_types %}
+                        <option value="{{ labour_type.id }}">{{ labour_type.title }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div class="mb-3">
+                <label for="sarder_name" class="form-label">Sarder Name</label>
+                <input type="text" class="form-control" id="sarder_name" name="sarder_name">
+            </div>
+            
+            <div class="mb-3">
+                <label for="payment_sequence" class="form-label">Payment Sequence</label>
+                <select class="form-select" id="payment_sequence" name="payment_sequence">
+                <option selected>Select Salary Method</option>
+                <option value="Monthly">Monthly</option>
+                <option value="production">Production</option>
+                <option value="Daily">Daily</option>
+                </select>
+            </div>
+            
+            <div class="mb-3">
+                <label for="rate" class="form-label">Rate</label>
+                <input type="number" class="form-control" step="0.01" id="rate" name="rate">
+            </div>
+            
+            <div class="mb-3">
+                <label for="requirements" class="form-label">Requirements</label>
+                <textarea class="form-control" id="requirements" name="requirements" rows="3"></textarea>
+            </div>
+
+            <div class="mb-3">
+                <label for="number_of_employee" class="form-label">Number of Employees</label>
+                <input type="number" class="form-control" id="number_of_employee" name="number_of_employee">
+            </div>
+            
+            <div class="mb-3">
+                <label for="starting_date" class="form-label">Starting Date</label>
+                <input type="date" class="form-control" id="starting_date" name="starting_date">
+            </div>
+            
+            <div class="mb-3">
+                <label for="closing_date" class="form-label">Closing Date</label>
+                <input type="date" class="form-control" id="closing_date" name="closing_date">
+            </div>
+            
+            <div class="mb-3">
+                <label for="season_target" class="form-label">Season Target</label>
+                <input type="text" class="form-control" id="season_target" name="season_target">
+            </div>
+              
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+</div>
+
+{% endblock content %}

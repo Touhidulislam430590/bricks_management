@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container">
+    <h1 class="text-center">All Selling List</h1>
+
+    <div class="row pt-3">
+        <div class="col-md-3">
+            {% comment %} <div class="modal-dialog modal-dialog-centered">
+                ...
+            </div> {% endcomment %}
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#instantSelling">New Selling</button>
+
+            <!-- Modal -->
+    
+
+            <div class="modal bd-example-modal-lg fade" id="instantSelling" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header bg-primary text-white">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">Instant Selling</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        
+                        
+                        <div class="modal-body">
+                            {% include "selling/newSelling.html" %}
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-md-3">
+            <a href="{% url "due_list" %}" class="btn btn-outline-primary">Due Selling</a>
+            <a href="{% url "payment_history" %}" class="btn btn-outline-primary">Payment History</a>
+        </div>
+        <div class="col-md-3"></div>
+        
+        <div class="col-md-3">
+            {% comment %} space for search bar  {% endcomment %}
+            <form class="d-flex" role="search" method="POST" action="{% url 'search_selling' %}">
+                {% csrf_token %}
+                <input class="form-control me-2" type="date" placeholder="Search" name="search_selling" aria-label="Search">
+                <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="row mt-3">
+        <div class="col-md-12">
+            <table class="table table-striped">
+                <thead class="table-dark">
+                    <tr >
+                        <th scope="col">id</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Addres</th>
+                        <th scope="col">Bricks Type</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">Total Price</th>
+                        <th scope="col">Payment</th>
+                        <th scope="col">Due</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if queryset %}
+                    {% for sell in queryset %}
+                    <tr>
+                        <th scope="row">{{sell.id}}</th>
+                        <td>{{sell.customer_name}}</td>
+                        <td>{{sell.customer_address}}</td>
+                        <td>{{sell.Bricks_type}}</td>
+                        <td>{{sell.product_quantity}}</td>
+                        <td>{{sell.total_price}}</td>
+                        <td>{{sell.payment}}</td>
+                        <td>{{sell.due}}</td>
+                        <td><a href="{% url "sell" sell.id %}" class="btn btn-info btn-sm">Details</a></td>
+                    </tr>
+                    {% endfor %}
+
+                    {% else %}
+                    
+                    {% for i in all_sell %}
+
+                    <tr>
+                        <th scope="row">{{i.id}}</th>
+                        <td>{{i.customer_name}}</td>
+                        <td>{{i.customer_address}}</td>
+                        <td>{{i.Bricks_type}}</td>
+                        <td>{{i.product_quantity}}</td>
+                        <td>{{i.total_price}}</td>
+                        <td>{{i.payment}}</td>
+                        <td>{{i.due}}</td>
+                        <td><a href="{% url 'sell' i.id %}" class="btn btn-info btn-sm">Details</a></td>
+                    </tr>
+                    {% endfor %}
+
+                    {% endif %}
+                  
+                </tbody>
+            </table>
+            <div class="pagination justify-content-center">
+                <ul class="pagination">
+                    {% if all_sell.has_previous %}
+                        <li class="page-item">
+                            <a href="?page=1" class="page-link">&laquo; First</a>
+                        </li>
+                        <li class="page-item">
+                            <a href="?page={{ all_sell.previous_page_number }}" class="page-link">Previous</a>
+                        </li>
+                    {% endif %}
+            
+                    {% for num in all_sell.paginator.page_range %}
+                        <li class="page-item {% if num == all_sell.number %}active{% endif %}">
+                            <a href="?page={{ num }}" class="page-link">{{ num }}</a>
+                        </li>
+                    {% endfor %}
+            
+                    {% if all_sell.has_next %}
+                        <li class="page-item">
+                            <a href="?page={{ all_sell.next_page_number }}" class="page-link">Next</a>
+                        </li>
+                        <li class="page-item">
+                            <a href="?page={{ all_sell.paginator.num_pages }}" class="page-link">&raquo; Last</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+

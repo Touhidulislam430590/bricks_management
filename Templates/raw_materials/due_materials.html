@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <h2 class="text-center">Raw Materials Due Bill's</h2>
+
+    <a href="{% url 'raw_materials' %}" class="btn btn-outline-primary">Back</a>
+
+    <div class="mt-3">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Issue Date</th>
+                    <th>Petroleum Type</th>
+                    <th>Vendor Name</th>
+                    <th>Quantity</th>
+                    <th>Rate</th>
+                    <th>Total Price</th>
+                    <th>Done Payment</th>
+                    <th>Due</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in combine_data %}
+                <tr>
+                    <td>{{ item.issue_date }}</td>
+                    {% if item.petroleum_type %}
+                    <td>{{ item.petroleum_type }}</td>
+                    {% else %}
+                    <td>Soil</td>
+                    {% endif %}
+                    <td>{{ item.vendor_name }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>{{ item.rate }}</td>
+                    <td>{{ item.total_price }}</td>
+                    <td>{{ item.done_payment }}</td>
+                    <td>{{ item.due }}</td>
+                    <td><a href="{% url 'due_details' item.id item.vendor_name %}" class="btn btn-sm btn-primary">Details</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="pagination justify-content-center">
+            <ul class="pagination">
+                {% if combine_data.has_previous %}
+                    <li class="page-item">
+                        <a href="?page=1" class="page-link">&laquo; First</a>
+                    </li>
+                    <li class="page-item">
+                        <a href="?page={{ combine_data.previous_page_number }}" class="page-link">Previous</a>
+                    </li>
+                {% endif %}
+        
+                {% for num in combine_data.paginator.page_range %}
+                    <li class="page-item {% if num == combine_data.number %}active{% endif %}">
+                        <a href="?page={{ num }}" class="page-link">{{ num }}</a>
+                    </li>
+                {% endfor %}
+        
+                {% if combine_data.has_next %}
+                    <li class="page-item">
+                        <a href="?page={{ combine_data.next_page_number }}" class="page-link">Next</a>
+                    </li>
+                    <li class="page-item">
+                        <a href="?page={{ combine_data.paginator.num_pages }}" class="page-link">&raquo; Last</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

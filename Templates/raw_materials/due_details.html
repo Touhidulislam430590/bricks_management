@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <h3 class="text-center">Info About {{data.id}} ID</h3>
+    
+    <div class="mt-2 mb-3">
+		<a href="{% url 'due_materials' %}" class="btn btn-outline-primary">Back</a>
+	</div>
+    
+
+    {% if data_type == 'soil' %}
+
+    <div class="row">
+        <div class="col-sm-6">
+            <h5>Serial Number : {{data.id}}</h5>
+            <h5>Vendor Name: {{data.vendor_name}}</h5>
+        </div>
+
+        <div class="col-sm-6">
+            <h5>Date and Time : {{data.issue_date}}</h5>
+            <h5>Product Name : {{data_type}}</h5>
+        </div>
+    </div>
+
+    <div class="mt-1 border border-dark">
+        <table class="table table-borderless m-0 p-0">
+            <tr class="m-0 p-0">
+                <td class="m-0 p-0">Rate</td>
+                <td class="ps-3 pe-3 m-0 p-0">:</td>
+                <td class="m-0 p-0 ps-3 pe-3">{{data.rate}}</td>
+                <td class="ps-5 pe-5 m-0 p-0"></td>
+                <td class="m-0 p-0">Total Price</td>
+                <td class="ps-3 pe-3 m-0 p-0">:</td>
+                <td class="m-0 p-0 ps-3 pe-3">{{data.total_price}}</td>
+            </tr>
+    
+            <tr class="border-bottom border-dark m-0 p-0">
+                <td class="m-0 p-0">Quantity</td>
+                <td class="ps-3 pe-3 m-0 p-0">:</td>
+                <td class="m-0 p-0 ps-3 pe-3">{{data.quantity}}</td>
+                <td class="ps-5 pe-5 m-0 p-0"></td>
+                <td class="m-0 p-0">Due</td>
+                <td class="ps-3 pe-3 m-0 p-0">:</td>
+                <td class="m-0 p-0 ps-3 pe-3">{{data.due}}</td>
+            </tr>
+        </table>
+    </div>
+    
+
+    {% elif data_type == 'petroleum' %}
+    
+    <div class="row">
+        <div class="col-sm-6">
+            <h5>Serial Number : {{data.id}}</h5>
+            <h5>Vendor Name: {{data.vendor_name}}</h5>
+        </div>
+
+        <div class="col-sm-6">
+            <h5>Date and Time : {{data.issue_date}}</h5>
+            <h5>Product Name : {{data_type}} -- {{data.petroleum_type}}</h5>
+        </div>
+    </div>
+
+    <div class="mt-1 border border-dark">
+        <table class="table table-borderless m-0 p-0">
+            <tr class="m-0 p-0">
+                <td class="m-0 p-0">Rate</td>
+                <td class="ps-3 pe-3 m-0 p-0">:</td>
+                <td class="m-0 p-0 ps-3 pe-3">{{data.rate}}</td>
+                <td class="ps-5 pe-5 m-0 p-0"></td>
+                <td class="m-0 p-0">Total Price</td>
+                <td class="ps-3 pe-3 m-0 p-0">:</td>
+                <td class="m-0 p-0 ps-3 pe-3">{{data.total_price}}</td>
+            </tr>
+    
+            <tr class="border-bottom border-dark m-0 p-0">
+                <td class="m-0 p-0">Quantity</td>
+                <td class="ps-3 pe-3 m-0 p-0">:</td>
+                <td class="m-0 p-0 ps-3 pe-3">{{data.quantity}}</td>
+                <td class="ps-5 pe-5 m-0 p-0"></td>
+                <td class="m-0 p-0">Due</td>
+                <td class="ps-3 pe-3 m-0 p-0">:</td>
+                <td class="m-0 p-0 ps-3 pe-3">{{data.due}}</td>
+            </tr>
+        </table>
+    </div>
+     
+    {% endif %}
+
+
+    {% if data.due != 0 %}
+        <h2 class="text-primary mt-5">Raw Materials Payment Form</h2>
+        <form action="{% url 'due_invoice' data.id data_type %}" method="POST">
+            {% csrf_token %}
+            <div class="row mt-3 mb-3">                
+                <div class="col-md-1"><h5>Amount : </h5></div>
+                <div class="col-md-4">
+                    <div class="mb-3">
+                        <input type="number" name="amount" class="form-control" id="delivery_quentity">
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <button class="btn btn-success" type="submit">Submit</button>
+                </div>
+                <div class="col-md-5"></div>
+            </div>
+        </form>
+    {% endif %}
+
+
+
+
+
+
+</div>
+
+
+{% endblock content %}

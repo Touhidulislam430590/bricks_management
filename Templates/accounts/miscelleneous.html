@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+
+<h1 class="text-center">Miscellenous</h1>
+
+<div class="container-fluid">
+
+    <div class="row">
+        <div class="col-md-3">
+        <a href="{% url 'accounts' %}" class="btn btn-outline-primary me-3">Back</a>
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#exampleModal">Add Miscellenous</button>
+
+        </div>
+        <div class="col-md-3"></div>
+        <div class="col-md-3"></div>
+        <div class="col-md-3">
+            <form class="d-flex" role="search" method="POST" action="{% url 'search_miscllenous' %}">
+                {% csrf_token %}
+                <input class="form-control me-2" type="date" placeholder="Search" name="search_miscllenous" aria-label="Search">
+                <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- Modal -->
+    <div class="modal fade " id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="" method="post">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="" class="form-label">Title of Cost</label>
+                            <input type="text" name="cost_title" class="form-control" id="" aria-describedby="">
+                        </div> 
+                        <div class="mb-3">
+                            <label for="" class="form-label">Amount</label>
+                            <input type="number" name="amount" class="form-control" id="" aria-describedby="">
+                        </div>
+                        
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <!-- <button type="button" class="btn btn-primary">Save</button> -->
+                        <input type="submit" value="Save" class="btn btn-primary">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    {% if queryset %}
+
+    <table class="table table-striped mt-3">
+        <thead>
+            <tr class="table-primary">
+                <th scope="col">#</th>
+                <th scope="col">Title</th>
+                <th scope="col">Amount</th>
+                <th scope="col">Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for i in queryset %}
+            <tr>
+                <td>{{i.id}}</td>
+                <td>{{i.title}}</td>
+                <td>{{i.amount}}</td>
+                <td>{{i.date}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    {% else %}
+    
+    <table class="table table-striped mt-3">
+        <thead>
+            <tr class="table-primary">
+                <th scope="col">#</th>
+                <th scope="col">Title</th>
+                <th scope="col">Amount</th>
+                <th scope="col">Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for i in miscell %}
+            <tr>
+                <td>{{i.id}}</td>
+                <td>{{i.title}}</td>
+                <td>{{i.amount}}</td>
+                <td>{{i.date}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="pagination justify-content-center">
+        <ul class="pagination">
+            {% if miscell.has_previous %}
+                <li class="page-item">
+                    <a href="?page=1" class="page-link">&laquo; First</a>
+                </li>
+                <li class="page-item">
+                    <a href="?page={{ miscell.previous_page_number }}" class="page-link">Previous</a>
+                </li>
+            {% endif %}
+    
+            {% for num in miscell.paginator.page_range %}
+                <li class="page-item {% if num == miscell.number %}active{% endif %}">
+                    <a href="?page={{ num }}" class="page-link">{{ num }}</a>
+                </li>
+            {% endfor %}
+    
+            {% if miscell.has_next %}
+                <li class="page-item">
+                    <a href="?page={{ miscell.next_page_number }}" class="page-link">Next</a>
+                </li>
+                <li class="page-item">
+                    <a href="?page={{ miscell.paginator.num_pages }}" class="page-link">&raquo; Last</a>
+                </li>
+            {% endif %}
+        </ul>
+    </div>
+
+    {% endif %}
+
+    
+</div>
+
+{% endblock content %}

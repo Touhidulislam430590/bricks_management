@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+
+<style>
+    /* Define your CSS styles for the invoice layout */
+    #invoice {
+        background-color: #ffffff;
+        padding: 20px;
+        border: 1px solid #ccc;
+        font-family: Arial, sans-serif;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+    
+    .invoice-header h1 {
+        font-size: 24px;
+        margin-bottom: 5px;
+    }
+    .invoice-details {
+        margin-bottom: 20px;
+    }
+    .invoice-details p {
+        margin: 5px 0;
+    }
+    /* Custom styles for printing */
+    @media print {
+        /* Styles for printing */
+        body {
+            font-size: 12px;
+            line-height: 1.5;
+        }
+        #invoice {
+            max-width: none;
+            margin: 0;
+            border: none;
+        }
+        .invoice-header h1 {
+            font-size: 20px;
+        }
+        .hide-print {
+            display: none; /* Hide the print button when printing */
+        }
+    }
+</style>
+
+
+<div class="container pt-3">
+
+    {% if sell_info %}
+    <div class="invoice">
+            
+        <h2 class="text-center hide-print">Information page for {{sell_info.id}} ID</h2>
+
+        <div class="mt-2 mb-2">
+            <a href="{% url 'selling' %}" class="btn btn-outline-primary">Back</a>
+        </div>
+        
+        <div class="row mt-5 mb-3">
+            <div class="col-sm-6">
+                <h4>Name: {{sell_info.customer_name}}</h4>
+                <h4>Customer Address: {{sell_info.customer_address}}</h4>
+                <h4>Customer Mobile: {{sell_info.customer_mobile}}</h4>
+            </div>
+            <div class="col-sm-6">
+                <h4>Selling Type: {{sell_info.selling_type}}</h4>
+                <h4>Bricks Type: {{sell_info.Bricks_type}}</h4>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <table class="table table-bordered border-dark">
+                    <tr>
+                        <td>
+                            <table>
+                                <tr>
+                                    <td><h5>Product Rate:</h5></td>
+                                    <td>{{sell_info.product_rate}}</td>
+                                </tr>
+                                
+                                <tr class="border-bottom">
+                                    <td><h5>Product Quantity:</h5></td>
+                                    <td>{{sell_info.product_quantity}}</td>
+                                </tr>
+
+                                <tr>
+                                    <td><h5>Total Price:</h5></td>
+                                    <td>{{sell_info.total_price}}</td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="col-sm-6">
+                <table class="table table-bordered border-dark">
+                    <tr>
+                        <td>
+                            <table>
+                                <tr>
+                                    <td><h5>Total Price:</h5></td>
+                                    <td>{{sell_info.total_price}}</td>
+                                </tr>
+                                
+                                <tr class="border-bottom">
+                                    <td><h5>Payment:</h5></td>
+                                    <td>{{sell_info.payment}}</td>
+                                </tr>
+
+                                <tr>
+                                    <td><h5>Due:</h5></td>
+                                    <td>{{sell_info.due}}</td>
+                                </tr>
+
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <h4>Commission: {{sell_info.commission}} %</h4>
+    </div>
+    {% endif %}
+
+    <a href="{% url 'ready' sell_info.id %}" class="btn btn-success hide-print">Ready To Delivery</a>
+    <a href="{% url 'sell_print' sell_info.id %}" target="_blank" class="btn btn-primary hide-print">Generate Invoice</a>
+</div>
+
+
+
+
+{% endblock content %}

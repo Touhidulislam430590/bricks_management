@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+
+<h2 class="text-center">Pending Bill Payment</h2>
+
+<div class="container">
+    <form action="" method="POST">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="" class="form-label">Customer Name</label>
+            <input type="text" class="form-control" id="" readonly value="{{due_info.customer_name}}">
+        </div>
+
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label for="" class="form-label">Customer Address</label>
+                    <input type="text" class="form-control" id="" readonly value="{{due_info.customer_address}}">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label for="" class="form-label">Customer Mobile</label>
+                    <input type="text" class="form-control" id="" readonly value="{{due_info.customer_mobile}}">
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label for="" class="form-label">Selling Type</label>
+                    <input type="text" class="form-control" id="" readonly value="{{due_info.selling_type}}">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label for="" class="form-label">Bricks Type</label>
+                    <input type="text" class="form-control" id="" readonly value="{{due_info.Bricks_type}}">
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-md-4">
+                <div class="mb-3">
+                    <label for="" class="form-label">Total Price</label>
+                    <input type="text" class="form-control" readonly id="" value="{{due_info.total_price}}">
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="mb-3">
+                    <label for="" class="form-label">Due Bill</label>
+                    <input type="text" class="form-control" readonly id="" value="{{due_info.due}}">
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="mb-3">
+                    <label for="" class="form-label">Payment</label>
+                    <input type="number" class="form-control" id="" name="payment">
+                </div>
+            </div>
+        </div>
+
+        <button class="btn btn-primary">Submit</button>
+
+    </form>
+</div>
+
+{% endblock content %}
